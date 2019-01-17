@@ -20,7 +20,7 @@ addons:
       - dnsutils    # for dig command in ./AkaPAPI/test/cibuild
 
 before_install:
-  - openssl aes-256-cbc -K $encrypted_47d2d923bf7d_key -iv $encrypted_47d2d923bf7d_iv -in edgerc.txt.enc -out .edgerc -d
+  - openssl aes-256-cbc -K $encrypted_46a692ff86bf_key -iv $encrypted_46a692ff86bf_iv -in edgerc.txt.enc -out .edgerc -d
 
 before_script:
   - chmod +x ./AkaPAPI/test/cibuild
