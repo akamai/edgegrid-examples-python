@@ -1,0 +1,39 @@
+dist: xenial
+sudo: false
+language: python
+python:  
+  # Not supporting anything declared for EOL: https://devguide.python.org/devcycle/#end-of-life-branches
+  # Only testing python3 per script requirements
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7"
+virtualenv:
+  system_site_packages: true
+
+install:
+  - pip3 install -r ./AkaPAPI/requirements.txt
+
+addons:
+  apt:
+    packages:
+      - dnsutils    # for dig command in ./AkaPAPI/test/cibuild
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_47d2d923bf7d_key -iv $encrypted_47d2d923bf7d_iv -in edgerc.txt.enc -out .edgerc -d
+
+before_script:
+  - chmod +x ./AkaPAPI/test/cibuild
+
+script: 
+  - ./AkaPAPI/test/cibuild
+
+before_deploy:
+  - export PATH=$PATH:$PWD
+
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: echo "Hello"
+    on:
+      branch: master

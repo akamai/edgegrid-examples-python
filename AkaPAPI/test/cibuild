@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e # halt script on error
+
+########################################
+### network environment info         ###
+########################################
+curl -s http://whatismyip.akamai.com | xargs echo "IP: "
+dig whoami.akamai.net +short | xargs echo "whoami: "
+
+########################################
+### see PATH variables for debugging ###
+########################################
+echo $PATH
+
+########################################
+### Begin Python script testing      ###
+########################################
+# Help
+alert=$(./AkaPAPI/AkaPAPI.py -h | grep "verbose" | awk -F " " '{print $NF}')
+[[ "${alert}" == "Alert" ]] && { echo "-h = SUCCESS"; } || { echo "-h = ERROR"; exit 1; }
+
+# Contracts
+contractTypeName=$(./AkaPAPI/AkaPAPI.py contracts --edgerc .edgerc --section travis | grep "contractTypeName:" | awk -F " " '{print $NF}')
+[[ "${contractTypeName}" == "AKAMAI_INTERNAL" ]] && { echo "-c contracts = SUCCESS"; } || { echo "-c contracts = ERROR"; exit 1; }
+
+# Groups
+groupName=$(./AkaPAPI/AkaPAPI.py groups --edgerc .edgerc --section travis | grep "groupName;" | awk -F " " '{print $NF}')
+[[ "${groupName}" == "parentGroupId;" ]] && { echo "-c groups = SUCCESS"; } || { echo "-c groups = ERROR"; exit 1; }
