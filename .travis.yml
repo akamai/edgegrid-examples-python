@@ -8,8 +8,6 @@ python:
   - "3.5"
   - "3.6"
   - "3.7"
-virtualenv:
-  system_site_packages: true
 
 install:
   - pip3 install -r ./AkaPAPI/requirements.txt
